@@ -1,0 +1,312 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>컴퓨터 소프트웨어학과 소개 앱</title>
+    
+    <link rel="stylesheet" href="jquery.mobile/jquery.mobile-1.4.5.min.css"/>
+    <script src="jquery.mobile/jquery-1.11.1.min.js"></script>
+    <script src="jquery.mobile/jquery.mobile-1.4.5.min.js"></script>
+    
+    <script src="cordova.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+    /* --- Modern Design Overrides --- */
+    :root {
+        --primary-color: #014f86;
+        --secondary-color: #2a6f97;
+        --background-color: #f0f4f8;
+        --card-bg-color: #ffffff;
+        --text-color: #333;
+        --header-text-color: #ffffff;
+        --border-color: #dee2e6;
+    }
+
+    /* 1. Global Font & Theme Override */
+    body, .ui-page, .ui-page-theme-b, .ui-body-b, .ui-listview > li, .ui-collapsible-content, h1, h2, h3, h4, h5, p, a {
+        font-family: 'Noto Sans KR', sans-serif !important;
+        text-shadow: none !important;
+    }
+    
+    .ui-page-theme-b, .ui-body-b {
+        background-color: var(--background-color) !important;
+        border-color: var(--border-color) !important;
+        color: var(--text-color) !important;
+    }
+
+    /* 2. Header & Footer Styling */
+    .ui-header.ui-bar-b, .ui-footer.ui-bar-b {
+        background-color: var(--primary-color) !important;
+        color: var(--header-text-color) !important;
+        border-bottom: 3px solid var(--secondary-color);
+    }
+    .ui-footer.ui-bar-b {
+        border-bottom: none;
+        border-top: 3px solid var(--secondary-color);
+    }
+
+    /* 3. Content & Listview Styling */
+    #home .ui-content {
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+    .ui-listview > .ui-li-has-arrow > .ui-btn {
+        background-color: var(--card-bg-color);
+        border-color: var(--border-color);
+        transition: background-color 0.2s;
+    }
+    .ui-listview > .ui-li-has-arrow > .ui-btn:hover {
+        background-color: #f8f9fa;
+    }
+    .ui-listview {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    /* 4. Collapsible Set Styling (학과소개, 연혁, 교수소개) */
+    .ui-collapsible-set {
+        margin-top: 20px !important;
+    }
+    .ui-collapsible-heading-toggle {
+        background-color: var(--card-bg-color) !important;
+        border-color: var(--border-color) !important;
+        color: var(--text-color) !important; /* <--- 글자색 문제 해결 지점 */
+    }
+    .ui-collapsible-heading-toggle:hover {
+        background-color: #f8f9fa !important;
+    }
+    .ui-collapsible-content {
+        background-color: var(--card-bg-color) !important;
+        border-color: var(--border-color) !important;
+        border-top: none !important;
+        text-align: justify;
+    }
+
+    /* 5. Professor Info Card Styling */
+    .faculty-section {
+        margin: 10px 0;
+    }
+    .faculty-title {
+        color: var(--primary-color);
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--border-color);
+    }
+    .faculty-card {
+        border: 1px solid var(--border-color);
+        background-color: #f8f9fa;
+        margin: 10px 0;
+        padding: 15px;
+        border-radius: 8px;
+    }
+    .faculty-card h5 {
+        color: var(--secondary-color);
+        margin: 0 0 10px 0;
+        font-weight: 700;
+        font-size: 1.1em;
+    }
+    .faculty-card p {
+        margin: 5px 0;
+        font-size: 0.95em;
+    }
+    .emeritus-card {
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        background-color: #f8f9fa;
+    }
+    .emeritus-card p { margin: 5px 0; }
+    
+    /* 6. Gallery Styling */
+    .picture {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+    }
+    .picture li a {
+        display: block;
+        margin: 0;
+        border: none;
+        overflow: hidden;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .picture li img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    .picture li a:hover img {
+        transform: scale(1.1);
+    }
+    
+    /* 7. Video pages styling */
+    .ui-bar-e {
+        background-color: var(--secondary-color) !important;
+        color: var(--header-text-color) !important;
+        border-color: var(--primary-color) !important;
+    }
+    iframe {
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+</style>
+</head>
+
+<body>
+<div data-theme="b">
+    <!-- Home Page -->
+    <div data-role="page" id="home">
+        <div data-role="header" data-theme="b">
+            <h1>동의과학대학교 컴퓨터 소프트웨어학과</h1>
+        </div>
+        <div data-role="content" style="text-align:center">
+            <img src="logo.png" width="180px" style="margin-bottom: 30px;">
+            <ul data-role="listview" data-inset="true">
+                <li><a href="#intro">컴퓨터 소프트웨어학과 소개</a></li>
+                <li><a href="#movie" data-rel="dialog">컴퓨터 소프트웨어학과 영상</a></li>
+                <li><a href="#wizard3-1" data-rel="dialog">재학생 공연 영상</a></li>
+                <li><a href="#gallery">컴퓨터 소프트웨어학과 사진</a></li>
+            </ul>
+        </div>
+        <div data-role="footer" data-position="fixed" data-theme="b">
+            <h1>컴퓨터 소프트웨어학과</h1>
+        </div>
+    </div>
+    
+    <!-- Introduction Page -->
+    <div data-role="page" id="intro" data-theme="b">
+        <div data-role="header" data-theme="b">
+            <a href="#home" data-icon="arrow-l" data-direction="reverse">처음</a>         
+            <h1>학과 상세 소개</h1>
+        </div>
+        <div data-role="content">
+            <div data-role="collapsible-set" data-theme="b" data-content-theme="e">
+                <div data-role="collapsible" data-collapsed="false">
+                    <h3>학과소개</h3>
+                    <p>컴퓨터소프트웨어과는 웹 · 모바일앱 · 데이터베이스 · 인공지능 · 사물인터넷 · 클라우드컴퓨팅 등 스마트 IT 산업 분야의 실력있는 소프트웨어 개발 전문가 양성을 목표로 교육하고 있습니다. 학생들은 웹 및 모바일 앱개발, 프로그래밍 언어, 데이터베이스, 소프트웨어 설계 및 모델링 등 체계적인 이론과 실습을 통하여 기초 능력을 학습하고, 그 바탕 위에서 다양한 팀 프로젝트 통해 심화 학습 및 현장 실무 능력을 키우고 있습니다. 정규교육과정 이외에도 학생들은 전공동아리 활동, 캡스톤 디자인 프로젝트, 각종 대외 소프트웨어 개발 공모전, 전국 대학생 해커톤 대회 등에 출전하여 출중한 결과를 내고 있으며, 이러한 밀도 높은 교육을 통해 학생들은 졸업 후 IT 분야의 전문 인력으로 진출하고 있습니다.</p>
+                </div>
+                <div data-role="collapsible">
+                    <h3>학과연혁</h3>
+                    <p>우리 컴퓨터소프트웨어과는 1983년 3월 모집정원 132명을 시작으로 하여 오늘에 이르고 있습니다. 30여년이 넘는 시간동안 수 많은 IT 분야의 인재들을 길러냈습니다. 급격하는 IT 관련 사회 변화에 적극적으로 대응하여 첨단 기술을 선도적으로 교과과정에 도입함으로써 현장 실무에 투입되어도 손색이 없는 인재를 배출해왔다고 자부하며, 우리 학과를 졸업한 동문들은 기업의 임직원, 교수, 연구소 연구원, 교사, 사업가 등 다양한 분야에서 각자의 역할을 다하고 있습니다. 2011년 9월부터 부산광역시와 부산정보산업진흥원이 부산지역 모바일 산업 활성화 프로그램의 일환으로 추진한 '모바일 앱 센터'가 컴퓨터소프트웨어과에 신설되었으며, 현재로는 부산시 AI서브센터라는 이름으로 변경되어 지역사회의 인공지능 기술을 보급하는데 앞장서고 있습니다.</p>
+                </div>
+                <div data-role="collapsible" >
+                    <h3>교수진 소개</h3>
+                    <div class="faculty-section">
+                        <h4 class="faculty-title">전임교수</h4>
+                        <div class="faculty-card">
+                            <h5>허봉식 교수 (학과장)</h5>
+                            <p><strong>담당과목:</strong> C 프로그래밍, 자료구조 등</p>
+                            <p><strong>연락처:</strong> 051-860-3213</p>
+                        </div>
+                        <div class="faculty-card">
+                            <h5>김진숙 교수</h5>
+                            <p><strong>담당과목:</strong> 데이터베이스, 사물인터넷프로그래밍 등</p>
+                            <p><strong>연락처:</strong> 051-860-3214</p>
+                        </div>
+                        <div class="faculty-card">
+                            <h5>김경민 교수</h5>
+                            <p><strong>담당과목:</strong> 컴퓨터구조, 시스템분석및설계 등</p>
+                        </div>
+                        <div class="faculty-card">
+                            <h5>김주현 교수</h5>
+                            <p><strong>담당과목:</strong> 자바프로그래밍, 모바일앱개발 등</p>
+                        </div>
+                        
+                        <h4 class="faculty-title" style="margin-top: 30px;">명예교수</h4>
+                        <div class="emeritus-card">
+                            <p>전선배 명예교수</p>
+                            <p>최석 명예교수</p>
+                            <p>백건효 명예교수</p>
+                            <p>김종현 명예교수</p>
+                        </div>
+                        
+                        <h4 class="faculty-title" style="margin-top: 30px;">조교</h4>
+                        <div class="faculty-card">
+                            <h5>김인호 조교</h5>
+                            <p><strong>연락처:</strong> 051-860-3210</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-role="footer" data-position="fixed" data-theme="b">
+            <h1>컴퓨터 소프트웨어학과</h1>
+        </div>      
+    </div>
+    
+    <!-- Department Video Page -->
+    <div data-role="page" id="movie" data-theme="b">
+        <div data-role="header" data-position="fixed" data-theme="b">
+            <h1>학과 소개 영상</h1>
+        </div>
+        <div data-role="content">
+            <div class="ui-bar ui-bar-e">컴퓨터 소프트웨어학과 소개 동영상</div><br/>
+            <iframe width="100%" height="240" src="https://www.youtube.com/embed/SGXx89fzkIA?si=0AeD-iSVJ_wdpu3D" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe><br/>
+        </div>
+    </div>
+    
+    <!-- Talent Show Video 1 Page -->
+    <div data-role="page" id="wizard3-1">
+        <div data-role="header">
+            <h1>재학생 공연 1</h1>
+        </div>
+        <div data-role="content">
+            <div class="ui-bar ui-bar-e">추상헌, 배진우 - Tears</div><br/>
+            <iframe width="100%" height="240" src="https://www.youtube.com/embed/LNNMMi5MENs?si=q-f_mDy4dlDJV5Mk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+        <div data-role="footer" class="ui-grid-a">
+            <div class="ui-block-a"><a href="#home" data-role="button" data-direction="reverse">처음으로</a></div>
+            <div class="ui-block-b"><a href="#wizard3-2" data-role="button" data-rel="dialog" data-transition="slide">다음 영상</a></div>
+        </div>
+    </div>
+
+    <!-- Talent Show Video 2 Page -->
+    <div data-role="page" id="wizard3-2">
+        <div data-role="header">
+            <h1>재학생 공연 2</h1>
+        </div>
+        <div data-role="content">
+            <div class="ui-bar ui-bar-e">김건엽 - 가시</div><br/>
+            <iframe width="100%" height="240" src="https://www.youtube.com/embed/KY7W6aQQh6I?si=idV1AUqg_Wni39n6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+        <div data-role="footer" class="ui-grid-a">
+            <div class="ui-block-a"><a href="#wizard3-1" data-role="button" data-direction="reverse">이전 영상</a></div>
+            <div class="ui-block-b"><a href="#home" data-role="button">처음으로</a></div>
+        </div>
+    </div>
+
+    <!-- Gallery Page -->
+    <div data-role="page" id="gallery" data-theme="b">
+        <div data-role="header" data-position="fixed" data-theme="b">
+            <a href="#home" data-icon="arrow-l" data-direction="reverse">처음</a>
+            <h1>학과 갤러리</h1>
+        </div>
+        <div data-role="content">
+            <ul class="picture">
+                <li><a href="4-1.jpg" rel="external"><img src="4-1.jpg" /></a></li> 
+                <li><a href="4-2.jpg" rel="external"><img src="4-2.jpg" /></a></li> 
+                <li><a href="4-3.jpg" rel="external"><img src="4-3.jpg" /></a></li> 
+                <li><a href="4-4.jpg" rel="external"><img src="4-4.jpg" /></a></li> 
+                <li><a href="4-5.jpg" rel="external"><img src="4-5.jpg" /></a></li> 
+                <li><a href="4-6.jpg" rel="external"><img src="4-6.jpg" /></a></li> 
+                <li><a href="4-7.jpg" rel="external"><img src="4-7.jpg" /></a></li> 
+                <li><a href="4-8.jpg" rel="external"><img src="4-8.jpg" /></a></li> 
+            </ul>
+        </div>
+        <div data-role="footer" data-position="fixed" data-theme="b">
+            <h1>컴퓨터 소프트웨어학과</h1>
+        </div>      
+    </div>
+</div>  
+</body>
+</html>
