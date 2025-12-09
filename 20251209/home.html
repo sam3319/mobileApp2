@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arti-fy - 홈</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kranky&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+            background: #FAFAFA;
+            color: #333;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-family: 'Kranky', cursive;
+            font-size: 28px;
+            color: #000;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #333;
+            padding: 5px;
+        }
+
+        /* Hero Banner */
+        .hero-banner {
+            position: relative;
+            width: 100%;
+            height: 450px;
+            margin-top: 60px;
+            overflow: hidden;
+            background: #f5f5f5;
+        }
+
+        .hero-slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100%;
+        }
+
+        .hero-slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-gradient {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(to top, rgba(255,255,255,0.95) 0%, transparent 100%);
+        }
+
+        .hero-content {
+            position: absolute;
+            bottom: 30px;
+            left: 20px;
+            right: 20px;
+            z-index: 10;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #333;
+            color: white;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .hero-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #000;
+        }
+
+        .hero-info {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .hero-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .hero-btn.play {
+            background: #333;
+            color: white;
+        }
+
+        .hero-btn.play:hover {
+            background: #000;
+        }
+
+        .hero-btn.info {
+            background: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .hero-btn.info:hover {
+            background: #e8e8e8;
+        }
+
+        /* Slide Indicators */
+        .slide-indicators {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 20;
+        }
+
+        .indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .indicator.active {
+            background: #333;
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        /* Section */
+        .section {
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+
+        .section-header {
+            padding: 0 20px;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Horizontal Scroll */
+        .scroll-container {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 0 20px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .performance-card {
+            flex: 0 0 auto;
+            width: 140px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .performance-card:hover {
+            transform: scale(1.05);
+        }
+
+        .card-poster {
+            width: 140px;
+            height: 200px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f5f5f5;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .card-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            padding: 4px 8px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .card-badge.hot {
+            background: #FF5722;
+        }
+
+        .card-badge.new {
+            background: #4CAF50;
+        }
+
+        .card-info {
+            padding: 8px 0;
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .card-venue {
+            font-size: 11px;
+            color: #666;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Category Grid */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            padding: 0 20px;
+        }
+
+        .category-item {
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 8px;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .category-item:hover .category-icon {
+            transform: scale(1.1);
+        }
+
+        .category-icon.musical {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .category-icon.concert {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .category-icon.classic {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .category-icon.dance {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .category-name {
+            font-size: 12px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* Loading */
+        .loading-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #333;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-top: 1px solid #E0E0E0;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0 8px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-item {
+            text-align: center;
+            cursor: pointer;
+            flex: 1;
+            padding: 5px;
+            transition: transform 0.2s;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            color: #999;
+            font-weight: 500;
+        }
+
+        .nav-item.active .nav-label {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">Arti-fy</div>
+            <div class="header-icons">
+                <button class="icon-btn" onclick="location.href='mypage.html'">👤</button>
+            </div>
+        </div>
+
+        <!-- Hero Banner -->
+        <div class="hero-banner" id="heroBanner">
+            <div class="hero-slides" id="heroSlides">
+                <div class="loading-container">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+            <div class="slide-indicators" id="slideIndicators"></div>
+        </div>
+
+        <!-- Category Section -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">🎯 카테고리</div>
+            </div>
+            <div class="category-grid">
+                <div class="category-item" onclick="goToSearch('AAAA')">
+                    <div class="category-icon">🎭</div>
+                    <div class="category-name">연극</div>
+                </div>
+                <div class="category-item" onclick="goToSearch('GGGA')">
+                    <div class="category-icon musical">🎵</div>
+                    <div class="category-name">뮤지컬</div>
+                </div>
+                <div class="category-item" onclick="goToSearch('CCCA')">
+                    <div class="category-icon concert">🎤</div>
+                    <div class="category-name">콘서트</div>
+                </div>
+                <div class="category-item" onclick="goToSearch('EEEB')">
+                    <div class="category-icon classic">🎻</div>
+                    <div class="category-name">클래식</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hot Performances -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">🔥 지금 인기있는 공연</div>
+            </div>
+            <div class="scroll-container" id="hotPerformances">
+                <div class="loading-container">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Musical -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">🎭 뮤지컬 추천</div>
+            </div>
+            <div class="scroll-container" id="musicalPerformances">
+                <div class="loading-container">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Theater -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">🎬 연극 추천</div>
+            </div>
+            <div class="scroll-container" id="theaterPerformances">
+                <div class="loading-container">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Concert -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">🎤 콘서트 라인업</div>
+            </div>
+            <div class="scroll-container" id="concertPerformances">
+                <div class="loading-container">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label">홈</div>
+        </div>
+        <div class="nav-item" onclick="location.href='search.html'">
+            <div class="nav-icon">🔍</div>
+            <div class="nav-label">검색</div>
+        </div>
+        <div class="nav-item" onclick="location.href='mypage.html'">
+            <div class="nav-icon">👤</div>
+            <div class="nav-label">마이</div>
+        </div>
+    </div>
+
+    <script>
+        let allPerformances = [];
+        let currentSlide = 0;
+        let slideInterval;
+
+        // 로그인 체크
+        function checkLogin() {
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+            if (!isLoggedIn) {
+                alert('로그인이 필요합니다.');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // API 키 모달 (간단 버전)
+        function openApiModal() {
+            const apiKey = localStorage.getItem('kopisApiKey');
+            if (!apiKey) {
+                alert('검색 페이지에서 API 키를 설정해주세요.');
+                location.href = 'search.html';
+            } else {
+                alert('API 키: ' + apiKey.substring(0, 10) + '...');
+            }
+        }
+
+        // 공연 데이터 로드
+        async function loadPerformances() {
+            const apiKey = localStorage.getItem('kopisApiKey');
+            
+            if (!apiKey) {
+                // API 키 없으면 더미 데이터
+                setTimeout(() => {
+                    allPerformances = getDummyData();
+                    displayAllSections();
+                }, 500);
+                return;
+            }
+
+            try {
+                const today = new Date();
+                const stdate = formatDate(today);
+                const eddate = formatDate(new Date(today.getTime() + 30*24*60*60*1000));
+                
+                const proxyUrl = 'http://localhost:3000/api/performances';
+                const url = `${proxyUrl}?apiKey=${apiKey}&stdate=${stdate}&eddate=${eddate}&cpage=1&rows=50&sharea=11`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.success) {
+                    allPerformances = data.performances;
+                    displayAllSections();
+                } else {
+                    allPerformances = getDummyData();
+                    displayAllSections();
+                }
+                
+            } catch (error) {
+                console.error('API 호출 실패:', error);
+                allPerformances = getDummyData();
+                displayAllSections();
+            }
+        }
+
+        // 모든 섹션 표시
+        function displayAllSections() {
+            // 히어로 배너 슬라이드 (3개)
+            displayHeroBanner();
+            
+            // 인기 공연 (전체에서 랜덤 10개)
+            const hotPerfs = shuffleArray([...allPerformances]).slice(0, 10);
+            displayPerformanceSection('hotPerformances', hotPerfs, 'hot');
+            
+            // 뮤지컬
+            const musicals = allPerformances.filter(p => p.genrenm && p.genrenm.includes('뮤지컬')).slice(0, 10);
+            displayPerformanceSection('musicalPerformances', musicals, 'new');
+            
+            // 연극
+            const theaters = allPerformances.filter(p => p.genrenm && p.genrenm.includes('연극')).slice(0, 10);
+            displayPerformanceSection('theaterPerformances', theaters);
+            
+            // 콘서트
+            const concerts = allPerformances.filter(p => p.genrenm && (p.genrenm.includes('대중') || p.genrenm.includes('콘서트'))).slice(0, 10);
+            displayPerformanceSection('concertPerformances', concerts);
+        }
+
+        // 히어로 배너 슬라이드 표시
+        function displayHeroBanner() {
+            if (allPerformances.length === 0) return;
+            
+            // 최대 3개 공연
+            const featured = allPerformances.slice(0, 3);
+            
+            const slidesHtml = featured.map(perf => `
+                <div class="hero-slide">
+                    <img src="${perf.poster || 'https://via.placeholder.com/480x450/f5f5f5/999?text=Arti-fy'}" 
+                         alt="${perf.prfnm}" 
+                         class="hero-image"
+                         onerror="this.src='https://via.placeholder.com/480x450/f5f5f5/999?text=Arti-fy'">
+                    <div class="hero-gradient"></div>
+                    <div class="hero-content">
+                        <div class="hero-badge">🔥 추천</div>
+                        <div class="hero-title">${perf.prfnm}</div>
+                        <div class="hero-info">${perf.genrenm || '공연'} · ${perf.fcltynm || ''}</div>
+                        <div class="hero-buttons">
+                            <button class="hero-btn play" onclick="goToDetail('${perf.mt20id}')">
+                                ▶ 상세보기
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            document.getElementById('heroSlides').innerHTML = slidesHtml;
+            
+            // 인디케이터 표시
+            const indicatorsHtml = featured.map((_, index) => 
+                `<div class="indicator ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></div>`
+            ).join('');
+            document.getElementById('slideIndicators').innerHTML = indicatorsHtml;
+            
+            // 자동 슬라이드 시작
+            startAutoSlide(featured.length);
+        }
+
+        // 자동 슬라이드
+        function startAutoSlide(totalSlides) {
+            if (totalSlides <= 1) return;
+            
+            // 기존 인터벌 정리
+            if (slideInterval) {
+                clearInterval(slideInterval);
+            }
+            
+            // 3초마다 다음 슬라이드
+            slideInterval = setInterval(() => {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateSlide();
+            }, 3000);
+        }
+
+        // 슬라이드 이동
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlide();
+            
+            // 자동 슬라이드 재시작
+            const totalSlides = document.querySelectorAll('.hero-slide').length;
+            startAutoSlide(totalSlides);
+        }
+
+        // 슬라이드 업데이트
+        function updateSlide() {
+            const slidesContainer = document.getElementById('heroSlides');
+            const indicators = document.querySelectorAll('.indicator');
+            
+            // 슬라이드 이동
+            slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // 인디케이터 업데이트
+            indicators.forEach((indicator, index) => {
+                if (index === currentSlide) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
+        }
+
+        // 공연 섹션 표시
+        function displayPerformanceSection(containerId, performances, badgeType = null) {
+            const container = document.getElementById(containerId);
+            
+            if (performances.length === 0) {
+                container.innerHTML = '<div style="padding: 20px; text-align: center; color: #999;">공연 정보가 없습니다</div>';
+                return;
+            }
+            
+            const html = performances.map(perf => `
+                <div class="performance-card" onclick="goToDetail('${perf.mt20id}')">
+                    <div class="card-poster">
+                        <img src="${perf.poster || 'https://via.placeholder.com/140x200/f5f5f5/999?text=No+Image'}" 
+                             alt="${perf.prfnm}"
+                             onerror="this.src='https://via.placeholder.com/140x200/f5f5f5/999?text=No+Image'">
+                        ${badgeType ? `<div class="card-badge ${badgeType}">${badgeType === 'hot' ? '🔥 HOT' : '🆕 NEW'}</div>` : ''}
+                    </div>
+                    <div class="card-info">
+                        <div class="card-title">${perf.prfnm}</div>
+                        <div class="card-venue">${perf.fcltynm || '정보 없음'}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = html;
+        }
+
+        // 배열 섞기
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // 더미 데이터
+        function getDummyData() {
+            return [
+                {
+                    mt20id: 'PF001',
+                    prfnm: '뮤지컬 위키드',
+                    poster: 'https://via.placeholder.com/200x280/9C27B0/FFFFFF?text=위키드',
+                    genrenm: '뮤지컬',
+                    fcltynm: '샬롯데씨어터'
+                },
+                {
+                    mt20id: 'PF002',
+                    prfnm: '연극 햄릿',
+                    poster: 'https://via.placeholder.com/200x280/E91E63/FFFFFF?text=햄릿',
+                    genrenm: '연극',
+                    fcltynm: '충무아트센터'
+                },
+                {
+                    mt20id: 'PF003',
+                    prfnm: '뮤지컬 시카고',
+                    poster: 'https://via.placeholder.com/200x280/FF5722/FFFFFF?text=시카고',
+                    genrenm: '뮤지컬',
+                    fcltynm: '디큐브아트센터'
+                },
+                {
+                    mt20id: 'PF004',
+                    prfnm: '아이유 콘서트',
+                    poster: 'https://via.placeholder.com/200x280/2196F3/FFFFFF?text=IU',
+                    genrenm: '대중음악',
+                    fcltynm: '고척스카이돔'
+                }
+            ];
+        }
+
+        // 날짜 포맷
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}${month}${day}`;
+        }
+
+        // 상세 페이지 이동
+        function goToDetail(id) {
+            window.location.href = `detail.html?id=${id}`;
+        }
+
+        // 검색 페이지로 이동 (장르 필터링)
+        function goToSearch(genre) {
+            window.location.href = `search.html?genre=${genre}`;
+        }
+
+        // 로그아웃
+        function logout() {
+            if (confirm('로그아웃 하시겠습니까?')) {
+                sessionStorage.removeItem('isLoggedIn');
+                sessionStorage.removeItem('username');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // 초기화
+        checkLogin();
+        loadPerformances();
+    </script>
+</body>
+</html>

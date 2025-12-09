@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arti-fy - 공연 상세</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kranky&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+            background: #FAFAFA;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .header-title {
+            flex: 1;
+            font-size: 18px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .share-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        /* Poster */
+        .poster-section {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(to bottom, #f5f5f5, #e0e0e0);
+        }
+
+        .poster-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .like-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
+        }
+
+        .like-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .like-btn.liked {
+            animation: heartBeat 0.3s;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* Content */
+        .content {
+            padding: 25px 20px;
+        }
+
+        .genre-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: #333;
+            color: white;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #000;
+            line-height: 1.3;
+            margin-bottom: 15px;
+        }
+
+        .state-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            background: #4CAF50;
+            color: white;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .state-badge.ended {
+            background: #999;
+        }
+
+        .state-badge.upcoming {
+            background: #2196F3;
+        }
+
+        /* Info Section */
+        .info-section {
+            background: #F8F8F8;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .info-item {
+            display: flex;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #E8E8E8;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-icon {
+            font-size: 20px;
+            width: 30px;
+            text-align: center;
+        }
+
+        .info-content {
+            flex: 1;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-size: 15px;
+            color: #000;
+            font-weight: 500;
+        }
+
+        /* Description Section */
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .description {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #333;
+            white-space: pre-wrap;
+        }
+
+        /* Cast Section */
+        .cast-list {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .cast-list::-webkit-scrollbar {
+            display: none;
+        }
+
+        .cast-item {
+            flex: 0 0 auto;
+            text-align: center;
+        }
+
+        .cast-image {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #E0E0E0;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        .cast-name {
+            font-size: 13px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .cast-role {
+            font-size: 11px;
+            color: #999;
+            margin-top: 3px;
+        }
+
+        /* Price Section */
+        .price-list {
+            background: #F8F8F8;
+            border-radius: 12px;
+            padding: 15px;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #E8E8E8;
+        }
+
+        .price-item:last-child {
+            border-bottom: none;
+        }
+
+        .price-seat {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .price-amount {
+            font-size: 15px;
+            color: #000;
+            font-weight: 600;
+        }
+
+        /* Booking Button */
+        .booking-section {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            padding: 15px 20px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+        }
+
+        .booking-btn {
+            width: 100%;
+            padding: 16px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .booking-btn:hover {
+            background: #000;
+        }
+
+        .booking-btn:disabled {
+            background: #CCC;
+            cursor: not-allowed;
+        }
+
+        /* Loading */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            gap: 20px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #333;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Error */
+        .error-container {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .error-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">←</button>
+            <div class="header-title">공연 상세</div>
+            <button class="share-btn" onclick="sharePerformance()">📤</button>
+        </div>
+
+        <!-- Content -->
+        <div id="detailContent">
+            <div class="loading-container">
+                <div class="spinner"></div>
+                <div>공연 정보를 불러오는 중...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let performanceData = null;
+        let isLiked = false;
+
+        // URL에서 공연 ID 가져오기
+        function getPerformanceId() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
+        }
+
+        // 로그인 체크
+        function checkLogin() {
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+            if (!isLoggedIn) {
+                alert('로그인이 필요합니다.');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // 공연 상세 정보 불러오기
+        async function loadPerformanceDetail() {
+            const apiKey = localStorage.getItem('kopisApiKey');
+            const performanceId = getPerformanceId();
+
+            if (!performanceId) {
+                showError('잘못된 접근입니다.');
+                return;
+            }
+
+            if (!apiKey) {
+                showError('API 키가 설정되지 않았습니다.');
+                return;
+            }
+
+            try {
+                const proxyUrl = 'http://localhost:3000/api/performance';
+                const url = `${proxyUrl}/${performanceId}?apiKey=${apiKey}`;
+
+                console.log('상세 정보 로딩:', performanceId);
+
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || '상세 정보 조회 실패');
+                }
+
+                performanceData = data.performance;
+                console.log('상세 정보:', performanceData);
+
+                displayPerformanceDetail(performanceData);
+                checkIfLiked(performanceId);
+
+            } catch (error) {
+                console.error('상세 정보 로딩 실패:', error);
+                
+                if (error.message.includes('Failed to fetch')) {
+                    showError('서버에 연결할 수 없습니다.<br>서버가 실행 중인지 확인해주세요.');
+                } else {
+                    showError('상세 정보를 불러오는데 실패했습니다.<br>' + error.message);
+                }
+            }
+        }
+
+        // 상세 정보 표시
+        function displayPerformanceDetail(perf) {
+            const stateClass = getStateClass(perf.prfstate);
+            
+            const html = `
+                <!-- Poster -->
+                <div class="poster-section">
+                    <img src="${perf.poster || 'https://via.placeholder.com/400x600/CCCCCC/666666?text=No+Image'}" 
+                         alt="${perf.prfnm}" 
+                         class="poster-image"
+                         onerror="this.src='https://via.placeholder.com/400x600/CCCCCC/666666?text=No+Image'">
+                    <button class="like-btn" id="likeBtn" onclick="toggleLike()">♡</button>
+                </div>
+
+                <!-- Content -->
+                <div class="content">
+                    <span class="genre-badge">${perf.genrenm || '공연'}</span>
+                    <h1 class="title">${perf.prfnm}</h1>
+                    <span class="state-badge ${stateClass}">${perf.prfstate}</span>
+
+                    <!-- 기본 정보 -->
+                    <div class="info-section">
+                        <div class="info-item">
+                            <div class="info-icon">📅</div>
+                            <div class="info-content">
+                                <div class="info-label">공연 기간</div>
+                                <div class="info-value">${perf.prfpdfrom} ~ ${perf.prfpdto}</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">🏛️</div>
+                            <div class="info-content">
+                                <div class="info-label">공연 장소</div>
+                                <div class="info-value">${perf.fcltynm || '정보 없음'}</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">⏰</div>
+                            <div class="info-content">
+                                <div class="info-label">공연 시간</div>
+                                <div class="info-value">${perf.prfruntime || '정보 없음'}</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">👥</div>
+                            <div class="info-content">
+                                <div class="info-label">관람 연령</div>
+                                <div class="info-value">${perf.prfage || '전체 관람가'}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 공연 소개 -->
+                    ${perf.sty ? `
+                    <div class="section">
+                        <div class="section-title">📝 공연 소개</div>
+                        <div class="description">${perf.sty}</div>
+                    </div>
+                    ` : ''}
+
+                    <!-- 출연진 -->
+                    ${perf.prfcast ? `
+                    <div class="section">
+                        <div class="section-title">🎭 출연진</div>
+                        <div class="cast-list">
+                            ${perf.prfcast.split(',').slice(0, 5).map(actor => `
+                                <div class="cast-item">
+                                    <div class="cast-image">🎭</div>
+                                    <div class="cast-name">${actor.trim()}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    ` : ''}
+
+                    <!-- 제작진 -->
+                    ${perf.prfcrew ? `
+                    <div class="section">
+                        <div class="section-title">🎬 제작진</div>
+                        <div class="description">${perf.prfcrew}</div>
+                    </div>
+                    ` : ''}
+
+                    <!-- 가격 정보 -->
+                    ${perf.pcseguidance ? `
+                    <div class="section">
+                        <div class="section-title">💰 가격 정보</div>
+                        <div class="price-list">
+                            ${(() => {
+                                const priceText = perf.pcseguidance;
+                                
+                                // 가격 정보를 여러 형식으로 파싱
+                                // "전석 30,000원" 형식 처리
+                                // "R석 150,000원, S석 120,000원" 형식 처리
+                                
+                                // 정규식으로 "좌석명 금액원" 패턴 찾기
+                                const pricePattern = /([가-힣A-Za-z0-9]+석?)\s*([0-9,]+)\s*원/g;
+                                const matches = [];
+                                let match;
+                                
+                                while ((match = pricePattern.exec(priceText)) !== null) {
+                                    matches.push({
+                                        seat: match[1],
+                                        amount: match[2]
+                                    });
+                                }
+                                
+                                // 매칭된 가격 정보가 있으면 표시
+                                if (matches.length > 0) {
+                                    return matches.map(price => `
+                                        <div class="price-item">
+                                            <span class="price-seat">${price.seat}</span>
+                                            <span class="price-amount">${price.amount}원</span>
+                                        </div>
+                                    `).join('');
+                                } else {
+                                    // 매칭 실패시 원본 그대로 표시
+                                    return `
+                                        <div class="price-item">
+                                            <span class="price-seat" style="flex: 1;">${priceText}</span>
+                                        </div>
+                                    `;
+                                }
+                            })()}
+                        </div>
+                    </div>
+                    ` : `
+                    <div class="section">
+                        <div class="section-title">💰 가격 정보</div>
+                        <div class="price-list">
+                            <div class="price-item">
+                                <span class="price-seat" style="color: #999;">가격 정보가 제공되지 않습니다</span>
+                            </div>
+                        </div>
+                    </div>
+                    `}
+
+                    <!-- 공연 장소 상세 -->
+                    ${perf.dtguidance ? `
+                    <div class="section">
+                        <div class="section-title">ℹ️ 안내사항</div>
+                        <div class="description">${perf.dtguidance}</div>
+                    </div>
+                    ` : ''}
+                </div>
+
+                <!-- 예매 버튼 -->
+                <div class="booking-section">
+                    <button class="booking-btn" onclick="openBooking()" ${perf.prfstate === '공연완료' ? 'disabled' : ''}>
+                        ${perf.prfstate === '공연완료' ? '공연 종료' : '예매하기'}
+                    </button>
+                </div>
+            `;
+
+            document.getElementById('detailContent').innerHTML = html;
+        }
+
+        // 상태 클래스
+        function getStateClass(state) {
+            if (state === '공연완료') return 'ended';
+            if (state === '공연예정') return 'upcoming';
+            return '';
+        }
+
+        // 찜하기 토글
+        function toggleLike() {
+            const performanceId = getPerformanceId();
+            const likeBtn = document.getElementById('likeBtn');
+            
+            // 찜한 공연 정보를 객체로 저장 (ID, 제목, 포스터)
+            let likes = JSON.parse(localStorage.getItem('likedPerformances') || '[]');
+            
+            if (isLiked) {
+                // 찜 해제 - 기존 형식(문자열)과 새 형식(객체) 모두 처리
+                likes = likes.filter(item => {
+                    if (typeof item === 'string') {
+                        return item !== performanceId;
+                    } else {
+                        return item.id !== performanceId;
+                    }
+                });
+                likeBtn.textContent = '♡';
+                likeBtn.classList.remove('liked');
+                isLiked = false;
+            } else {
+                // 찜하기 - 공연 정보와 함께 저장
+                const likeData = {
+                    id: performanceId,
+                    title: performanceData?.prfnm || '공연',
+                    poster: performanceData?.poster || '',
+                    genre: performanceData?.genrenm || '',
+                    venue: performanceData?.fcltynm || ''
+                };
+                likes.push(likeData);
+                likeBtn.textContent = '❤️';
+                likeBtn.classList.add('liked');
+                isLiked = true;
+            }
+            
+            localStorage.setItem('likedPerformances', JSON.stringify(likes));
+        }
+
+        // 찜 상태 확인
+        function checkIfLiked(performanceId) {
+            const likes = JSON.parse(localStorage.getItem('likedPerformances') || '[]');
+            
+            // 이전 형식(배열) 또는 새 형식(객체) 모두 지원
+            isLiked = likes.some(item => {
+                if (typeof item === 'string') {
+                    return item === performanceId;
+                } else {
+                    return item.id === performanceId;
+                }
+            });
+            
+            const likeBtn = document.getElementById('likeBtn');
+            if (likeBtn && isLiked) {
+                likeBtn.textContent = '❤️';
+            }
+        }
+
+        // 예매하기
+        function openBooking() {
+            if (performanceData && performanceData.relateurl) {
+                window.open(performanceData.relateurl, '_blank');
+            } else {
+                alert('예매 링크 정보가 없습니다.');
+            }
+        }
+
+        // 공유하기
+        function sharePerformance() {
+            if (performanceData) {
+                const text = `${performanceData.prfnm}\n${performanceData.prfpdfrom} ~ ${performanceData.prfpdto}\n${performanceData.fcltynm}`;
+                
+                if (navigator.share) {
+                    navigator.share({
+                        title: performanceData.prfnm,
+                        text: text,
+                        url: window.location.href
+                    }).catch(err => console.log('공유 실패:', err));
+                } else {
+                    // 클립보드 복사
+                    navigator.clipboard.writeText(text + '\n' + window.location.href)
+                        .then(() => alert('링크가 복사되었습니다!'))
+                        .catch(() => alert('복사에 실패했습니다.'));
+                }
+            }
+        }
+
+        // 뒤로가기
+        function goBack() {
+            window.history.back();
+        }
+
+        // 에러 표시
+        function showError(message) {
+            document.getElementById('detailContent').innerHTML = `
+                <div class="error-container">
+                    <div class="error-icon">⚠️</div>
+                    <div>${message}</div>
+                </div>
+            `;
+        }
+
+        // 초기화
+        checkLogin();
+        loadPerformanceDetail();
+    </script>
+</body>
+</html>

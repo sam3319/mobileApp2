@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arti-fy - 로그인</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kranky&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+            background: #F8F8F8;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            padding: 20px 30px;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            font-size: 14px;
+            color: #000;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 5px;
+            font-size: 12px;
+        }
+
+        /* Logo */
+        .logo {
+            text-align: center;
+            margin: 80px 0 60px;
+        }
+
+        .logo h1 {
+            font-family: 'Kranky', cursive;
+            font-size: 52px;
+            font-weight: 400;
+            letter-spacing: 2px;
+            color: #000;
+        }
+
+        /* Form */
+        .form-container {
+            margin-top: 40px;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px 18px;
+            border: none;
+            background: #F5F5F5;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            color: #333;
+        }
+
+        .input-field::placeholder {
+            color: #AAAAAA;
+        }
+
+        /* 로그인 찾기 */
+        .link-text {
+            text-align: right;
+            margin: 12px 0 25px;
+        }
+
+        .link-text a {
+            color: #888;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        /* 로그인 버튼 */
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            background: #6D6D6D;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-bottom: 30px;
+        }
+
+        .btn-login:hover {
+            background: #5A5A5A;
+        }
+
+        /* 소셜 로그인 */
+        .social-login {
+            margin: 40px 0;
+        }
+
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .social-btn {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        .social-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .social-btn.google {
+            background: white;
+            border: 1px solid #E0E0E0;
+            color: #4285F4;
+        }
+
+        .social-btn.naver {
+            background: #03C75A;
+            color: white;
+        }
+
+        .social-btn.kakao {
+            background: #FEE500;
+            color: #3C1E1E;
+        }
+
+        .social-btn.facebook {
+            background: #1877F2;
+            color: white;
+        }
+
+        .social-btn.apple {
+            background: #000000;
+            color: white;
+            font-size: 18px;
+        }
+
+        /* 소셜 라벨 */
+        .social-labels {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .social-label {
+            width: 52px;
+            text-align: center;
+        }
+
+        /* 하단 링크 */
+        .bottom-links {
+            text-align: center;
+            margin: 35px 0 25px;
+            font-size: 13px;
+            color: #888;
+        }
+
+        .bottom-links a {
+            color: #888;
+            text-decoration: none;
+        }
+
+        .bottom-links a:hover {
+            color: #555;
+        }
+
+        .bottom-links .separator {
+            margin: 0 10px;
+            color: #DDD;
+        }
+
+        /* 언어 선택 */
+        .language-selector {
+            text-align: center;
+            margin: 25px 0;
+        }
+
+        .language-selector select {
+            padding: 10px 35px 10px 18px;
+            border: 1px solid #E0E0E0;
+            border-radius: 6px;
+            background: white;
+            font-size: 13px;
+            cursor: pointer;
+            color: #555;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span>17:16</span>
+            <div class="status-icons">
+                <span>-</span>
+                <span>-</span>
+                <span>-</span>
+            </div>
+        </div>
+
+        <!-- Logo -->
+        <div class="logo">
+            <h1>Arti-fy</h1>
+        </div>
+
+        <!-- Login Form -->
+        <div class="form-container">
+            <div class="input-group">
+                <input type="text" id="username" class="input-field" placeholder="이메일 또는 아이디">
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="password" class="input-field" placeholder="비밀번호">
+            </div>
+
+            <button class="btn-login" onclick="login()">로그인</button>
+
+            <!-- Social Login -->
+            <div class="social-login">
+                <div class="social-buttons">
+                    <button class="social-btn google" onclick="socialLogin('구글')">G</button>
+                    <button class="social-btn naver" onclick="socialLogin('네이버')">N</button>
+                    <button class="social-btn kakao" onclick="socialLogin('카카오')">K</button>
+                    <button class="social-btn facebook" onclick="socialLogin('페이스북')">f</button>
+                    <button class="social-btn apple" onclick="socialLogin('애플')">🍎</button>
+                </div>
+            </div>
+
+            <!-- Bottom Links -->
+            <div class="bottom-links">
+                <a href="#">아이디 찾기</a>
+                <span class="separator">|</span>
+                <a href="#">비밀번호 찾기</a>
+                <span class="separator">|</span>
+                <a href="signup.html">회원가입</a>
+            </div>
+
+            <!-- Language Selector -->
+            <div class="language-selector">
+                <select>
+                    <option>한국어</option>
+                    <option>English</option>
+                    <option>日本語</option>
+                    <option>中文</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 더미 계정
+        const DUMMY_ACCOUNT = {
+            username: 'test',
+            password: '1111'
+        };
+
+        // 로그인 처리
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) {
+                alert('아이디와 비밀번호를 입력해주세요.');
+                return;
+            }
+
+            if (username === DUMMY_ACCOUNT.username && password === DUMMY_ACCOUNT.password) {
+                sessionStorage.setItem('isLoggedIn', 'true');
+                sessionStorage.setItem('username', username);
+                window.location.href = 'home.html';
+            } else {
+                alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+            }
+        }
+
+        // 소셜 로그인
+        function socialLogin(platform) {
+            alert(`${platform} 로그인 기능은 데모 버전에서 지원하지 않습니다.`);
+        }
+
+        // Enter 키로 로그인
+        document.querySelectorAll('.input-field').forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    login();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
