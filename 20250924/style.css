@@ -1,0 +1,830 @@
+/* ===== 전역 스타일 ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* 네이버 스타일 색상 팔레트 */
+    --primary-color: #03c75a;
+    --secondary-color: #f8f9fa;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --text-light: #999999;
+    --background-main: #ffffff;
+    --background-section: #f8f9fa;
+    --border-color: #e5e5e5;
+    --border-light: #f1f3f4;
+    
+    /* 미세먼지 수준별 색상 */
+    --dust-good: #3498db;      /* 좋음 - 파란색 */
+    --dust-moderate: #2ecc71;  /* 보통 - 초록색 */
+    --dust-bad: #f39c12;       /* 나쁨 - 주황색 */
+    --dust-very-bad: #e74c3c;  /* 매우나쁨 - 빨간색 */
+    
+    /* 그림자 및 효과 */
+    --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
+    
+    /* 레이아웃 */
+    --border-radius: 8px;
+    --border-radius-small: 4px;
+    --transition: all 0.2s ease;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Malgun Gothic', '맑은 고딕', helvetica, 'Apple SD Gothic Neo', sans-serif;
+    background: var(--background-section);
+    min-height: 100vh;
+    color: var(--text-primary);
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+/* ===== 컨테이너 ===== */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 16px;
+}
+
+/* ===== 헤더 스타일 ===== */
+.header {
+    background: var(--background-main);
+    border-radius: var(--border-radius);
+    padding: 32px 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-card);
+    text-align: center;
+    border: 1px solid var(--border-light);
+}
+
+.header h1 {
+    color: var(--text-primary);
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    letter-spacing: -0.5px;
+}
+
+.header h1 i {
+    color: var(--primary-color);
+    font-size: 0.9em;
+}
+
+.header p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* ===== API 정보 섹션 ===== */
+.api-info {
+    background: var(--background-main);
+    border-radius: var(--border-radius);
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-light);
+}
+
+.api-info h2 {
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.api-info h2 i {
+    color: var(--primary-color);
+}
+
+/* ===== 폼 스타일 ===== */
+.api-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: 13px;
+}
+
+.form-group input, 
+.form-group select {
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-small);
+    font-size: 14px;
+    transition: var(--transition);
+    background: var(--background-main);
+    font-family: inherit;
+    color: var(--text-primary);
+}
+
+.form-group input:focus, 
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(3, 199, 90, 0.1);
+}
+
+/* ===== 버튼 스타일 ===== */
+.btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    box-shadow: var(--shadow-light);
+}
+
+.btn:hover {
+    background: #02b350;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-medium);
+}
+
+.btn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ===== 로딩 스타일 ===== */
+.loading {
+    display: none;
+    text-align: center;
+    padding: 40px;
+    background: var(--background-main);
+    border-radius: var(--border-radius);
+    margin: 20px 0;
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-light);
+}
+
+.loading i {
+    color: var(--primary-color);
+    margin-bottom: 12px;
+}
+
+.loading p {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* ===== 부산 지도 스타일 ===== */
+.busan-map-container {
+    background: var(--background-main);
+    border-radius: var(--border-radius);
+    padding: 24px;
+    margin-bottom: 32px;
+    border: 1px solid var(--border-light);
+}
+
+.busan-map-container h3 {
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.map-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+    max-width: 600px;
+    margin: 0 auto 24px auto;
+    position: relative;
+}
+
+.district-card {
+    background: rgba(173, 216, 230, 0.2);
+    border-radius: var(--border-radius);
+    padding: 8px;
+    text-align: center;
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 2px solid #e3f2fd;
+}
+
+.district-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+}
+
+.district-name {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.dust-level {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 12px;
+    margin: 0 auto;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.dust-level.good {
+    background: var(--dust-good);
+}
+
+.dust-level.moderate {
+    background: var(--dust-moderate);
+}
+
+.dust-level.bad {
+    background: var(--dust-bad);
+}
+
+.dust-level.very-bad {
+    background: var(--dust-very-bad);
+}
+
+/* 지도 범례 */
+.map-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: var(--border-radius-small);
+    margin-top: 16px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+}
+
+.legend-color.good {
+    background: var(--dust-good);
+}
+
+.legend-color.moderate {
+    background: var(--dust-moderate);
+}
+
+.legend-color.bad {
+    background: var(--dust-bad);
+}
+
+.legend-color.very-bad {
+    background: var(--dust-very-bad);
+}
+
+.unit-info {
+    width: 100%;
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-light);
+    margin-top: 8px;
+}
+
+/* 모바일에서 지도 최적화 */
+@media (max-width: 768px) {
+    .map-grid {
+        grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+        gap: 8px;
+    }
+    
+    .district-card {
+        min-height: 60px;
+        padding: 6px;
+    }
+    
+    .district-name {
+        font-size: 10px;
+    }
+    
+    .dust-level {
+        width: 28px;
+        height: 28px;
+        font-size: 10px;
+    }
+    
+    .map-legend {
+        gap: 12px;
+    }
+    
+    .legend-item {
+        font-size: 11px;
+    }
+}
+.data-container {
+    background: var(--background-main);
+    border-radius: var(--border-radius);
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-card);
+    display: none;
+    border: 1px solid var(--border-light);
+}
+
+.data-container h2 {
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.data-container h2 i {
+    color: var(--primary-color);
+}
+
+/* ===== 통계 카드 (네이버 스타일) ===== */
+.data-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.stat-card {
+    background: var(--background-main);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    border: 1px solid var(--border-light);
+    transition: var(--transition);
+    position: relative;
+}
+
+.stat-card:hover {
+    border-color: var(--border-color);
+    box-shadow: var(--shadow-medium);
+    transform: translateY(-2px);
+}
+
+.stat-card:nth-child(1) { 
+    border-left: 3px solid var(--dust-good);
+}
+.stat-card:nth-child(2) { 
+    border-left: 3px solid #4285f4;
+}
+.stat-card:nth-child(3) { 
+    border-left: 3px solid var(--dust-bad);
+}
+.stat-card:nth-child(4) { 
+    border-left: 3px solid var(--dust-very-bad);
+}
+
+.stat-card h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--text-primary);
+}
+
+.stat-card p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+/* ===== 테이블 스타일 (네이버 스타일) ===== */
+.table-container {
+    overflow-x: auto;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-light);
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--background-main);
+    font-size: 13px;
+    table-layout: fixed; /* 테이블 너비 고정 */
+}
+
+.data-table th {
+    background: #f8f9fa;
+    color: var(--text-primary);
+    padding: 14px 8px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    border-bottom: 2px solid var(--border-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.data-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--border-light);
+    transition: var(--transition);
+    vertical-align: middle;
+    white-space: nowrap; /* 텍스트를 한 줄로 제한 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+}
+
+/* 각 컬럼별 너비 설정 */
+.data-table th:nth-child(1), .data-table td:nth-child(1) { width: 15%; } /* 측정시간 */
+.data-table th:nth-child(2), .data-table td:nth-child(2) { width: 12%; } /* 구·군 */
+.data-table th:nth-child(3), .data-table td:nth-child(3) { width: 18%; } /* 측정소 */
+.data-table th:nth-child(4), .data-table td:nth-child(4) { width: 15%; } /* 날씨/온도 */
+.data-table th:nth-child(5), .data-table td:nth-child(5) { width: 15%; } /* 습도/풍속 */
+.data-table th:nth-child(6), .data-table td:nth-child(6) { width: 15%; } /* 미세먼지 농도 */
+.data-table th:nth-child(7), .data-table td:nth-child(7) { width: 10%; } /* 대기질 */
+
+.data-table tr:hover {
+    background: #f8f9fa;
+}
+
+.data-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* ===== 오염 수준 라벨 (네이버 스타일) ===== */
+.pollution-level {
+    padding: 4px 8px;
+    border-radius: 12px;
+    color: white;
+    font-weight: 500;
+    font-size: 11px;
+    display: inline-block;
+    text-align: center;
+    min-width: 50px;
+}
+
+.level-good { 
+    background: var(--dust-good);
+}
+.level-moderate { 
+    background: var(--dust-moderate);
+}
+.level-bad { 
+    background: var(--dust-bad);
+}
+.level-very-bad { 
+    background: var(--dust-very-bad);
+}
+
+/* ===== 정보 섹션 (네이버 스타일) ===== */
+.info-section {
+    background: var(--background-main);
+    padding: 24px;
+    border-radius: var(--border-radius);
+    margin-top: 24px;
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-light);
+}
+
+.info-section h3 {
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-section h3 i {
+    color: var(--primary-color);
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.info-card {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: var(--border-radius-small);
+    border: 1px solid var(--border-light);
+    transition: var(--transition);
+}
+
+.info-card:hover {
+    background: #f1f3f4;
+    border-color: var(--border-color);
+}
+
+.info-card h4 {
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.info-card p {
+    color: var(--text-secondary);
+    line-height: 1.5;
+    font-size: 13px;
+}
+
+/* ===== Busan 오버레이 이미지 ===== */
+.busan-overlay {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0.2;
+    z-index: 1000;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.busan-overlay:hover {
+    opacity: 0.5;
+}
+
+.busan-image {
+    width: 120px;
+    height: auto;
+    margin-bottom: 8px;
+}
+
+.busan-text {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+/* ===== 반응형 디자인 ===== */
+@media (max-width: 768px) {
+    .container {
+        padding: 16px 12px;
+    }
+    
+    .header, .api-info, .data-container, .info-section {
+        padding: 20px;
+        margin-bottom: 16px;
+    }
+    
+    .header h1 {
+        flex-direction: column;
+        gap: 8px;
+        font-size: 24px;
+    }
+    
+    .api-form {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .data-stats {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 12px;
+    }
+    
+    .stat-card {
+        padding: 16px;
+    }
+    
+    .stat-card h3 {
+        font-size: 20px;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .data-table {
+        font-size: 12px;
+    }
+    
+    .data-table th, .data-table td {
+        padding: 8px 6px;
+    }
+    
+    /* 모바일에서 일부 컬럼 숨기기 */
+    .data-table th:nth-child(4), .data-table td:nth-child(4), /* 날씨/온도 */
+    .data-table th:nth-child(5), .data-table td:nth-child(5) { /* 습도/풍속 */
+        display: none;
+    }
+    
+    /* 남은 컬럼들의 너비 재조정 */
+    .data-table th:nth-child(1), .data-table td:nth-child(1) { width: 25%; } /* 측정시간 */
+    .data-table th:nth-child(2), .data-table td:nth-child(2) { width: 15%; } /* 구·군 */
+    .data-table th:nth-child(3), .data-table td:nth-child(3) { width: 25%; } /* 측정소 */
+    .data-table th:nth-child(6), .data-table td:nth-child(6) { width: 25%; } /* 미세먼지 농도 */
+    .data-table th:nth-child(7), .data-table td:nth-child(7) { width: 10%; } /* 대기질 */
+    
+    .btn {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+    
+    /* 모바일에서 부산 오버레이 크기 조정 */
+    .busan-overlay {
+        bottom: 15px;
+        right: 15px;
+        opacity: 0.15;
+    }
+    
+    .busan-image {
+        width: 80px;
+        margin-bottom: 6px;
+    }
+    
+    .busan-text {
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+}
+
+@media (max-width: 480px) {
+    .data-table th, .data-table td {
+        padding: 6px 4px;
+        font-size: 11px;
+    }
+    
+    /* 초소형 모바일에서 측정소 컬럼도 숨기기 */
+    .data-table th:nth-child(3), .data-table td:nth-child(3) { /* 측정소 */
+        display: none;
+    }
+    
+    /* 매우 작은 화면에서의 컬럼 너비 재조정 */
+    .data-table th:nth-child(1), .data-table td:nth-child(1) { width: 30%; } /* 측정시간 */
+    .data-table th:nth-child(2), .data-table td:nth-child(2) { width: 20%; } /* 구·군 */
+    .data-table th:nth-child(6), .data-table td:nth-child(6) { width: 35%; } /* 미세먼지 농도 */
+    .data-table th:nth-child(7), .data-table td:nth-child(7) { width: 15%; } /* 대기질 */
+    
+    .stat-card {
+        padding: 12px;
+    }
+    
+    .stat-card h3 {
+        font-size: 18px;
+    }
+    
+    .pollution-level {
+        padding: 3px 6px;
+        font-size: 10px;
+        min-width: 40px;
+    }
+    
+    /* 매우 작은 화면에서 부산 오버레이 더 작게 */
+    .busan-overlay {
+        bottom: 10px;
+        right: 10px;
+        opacity: 0.1;
+    }
+    
+    .busan-image {
+        width: 60px;
+        margin-bottom: 4px;
+    }
+    
+    .busan-text {
+        font-size: 10px;
+        letter-spacing: 0.5px;
+    }
+}
+
+/* ===== 애니메이션 ===== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+}
+
+.data-container {
+    animation: fadeInUp 0.3s ease-out;
+}
+
+.table-row-animate {
+    animation: fadeInUp 0.2s ease-out both;
+}
+
+/* ===== 스크롤바 커스터마이징 ===== */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background-section);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-light);
+}
+
+/* ===== 접근성 개선 ===== */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ===== 인쇄용 스타일 ===== */
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+    
+    .header, .api-info, .data-container {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    .btn {
+        display: none;
+    }
+}

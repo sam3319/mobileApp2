@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arti-fy - 검색</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kranky&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+            background: #FAFAFA;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .logo {
+            font-family: 'Kranky', cursive;
+            font-size: 28px;
+            color: #000;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 15px;
+            font-size: 20px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 5px;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #E0E0E0;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #666;
+        }
+
+        .search-btn {
+            padding: 12px 20px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            padding: 8px 18px;
+            background: #F5F5F5;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            white-space: nowrap;
+            color: #666;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            background: #333;
+            color: white;
+        }
+
+        /* Location */
+        .location-bar {
+            padding: 15px 20px;
+            background: #F8F8F8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .region-select {
+            padding: 8px 12px;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            background: white;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+            outline: none;
+            font-weight: 500;
+        }
+
+        .region-select:focus {
+            border-color: #333;
+        }
+
+        /* Performance List */
+        .performance-list {
+            padding: 20px;
+        }
+
+        .performance-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .performance-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .poster {
+            width: 90px;
+            height: 120px;
+            background: #E0E0E0;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .poster.loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .genre-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #333;
+            color: white;
+            border-radius: 12px;
+            font-size: 11px;
+            width: fit-content;
+        }
+
+        .title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000;
+            line-height: 1.3;
+        }
+
+        .period, .venue {
+            font-size: 13px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .state-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #4CAF50;
+            color: white;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .state-badge.ended {
+            background: #999;
+        }
+
+        .state-badge.upcoming {
+            background: #2196F3;
+        }
+
+        /* Loading */
+        .loading-spinner {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #333;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        /* API Key Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #000;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            outline: none;
+        }
+
+        .modal-input:focus {
+            border-color: #333;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .modal-btn.primary {
+            background: #333;
+            color: white;
+        }
+
+        .modal-btn.secondary {
+            background: #F5F5F5;
+            color: #666;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-top: 1px solid #E0E0E0;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0 8px;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+        }
+
+        .nav-item {
+            text-align: center;
+            cursor: pointer;
+            flex: 1;
+            padding: 5px;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            color: #999;
+            font-weight: 500;
+        }
+
+        .nav-item.active .nav-label {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-top">
+                <div class="logo">Arti-fy</div>
+                <div class="header-icons">
+                    <button class="icon-btn" onclick="openApiModal()">⚙️</button>
+                    <button class="icon-btn" onclick="location.href='mypage.html'">👤</button>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <input type="text" class="search-input" id="searchInput" placeholder="공연, 전시, 장소를 검색하세요">
+                <button class="search-btn" onclick="searchPerformances()">검색</button>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="filterByGenre('all')">전체</button>
+                <button class="tab" onclick="filterByGenre('AAAA')">연극</button>
+                <button class="tab" onclick="filterByGenre('GGGA')">뮤지컬</button>
+                <button class="tab" onclick="filterByGenre('CCCA')">콘서트</button>
+                <button class="tab" onclick="filterByGenre('EEEB')">클래식</button>
+            </div>
+        </div>
+
+        <!-- Location Bar -->
+        <div class="location-bar">
+            📍 
+            <select class="region-select" id="regionSelect" onchange="changeRegion()">
+                <option value="11">서울</option>
+                <option value="26">부산</option>
+                <option value="27">대구</option>
+                <option value="28">인천</option>
+                <option value="29">광주</option>
+                <option value="30">대전</option>
+                <option value="31">울산</option>
+                <option value="36">세종</option>
+                <option value="41">경기</option>
+                <option value="42">강원</option>
+                <option value="43">충북</option>
+                <option value="44">충남</option>
+                <option value="45">전북</option>
+                <option value="46">전남</option>
+                <option value="47">경북</option>
+                <option value="48">경남</option>
+                <option value="50">제주</option>
+            </select>
+            <span id="locationText">지역 공연</span>
+        </div>
+
+        <!-- Performance List -->
+        <div class="performance-list" id="performanceList">
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <div>공연 정보를 불러오는 중...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item" onclick="location.href='home.html'">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label">홈</div>
+        </div>
+        <div class="nav-item active">
+            <div class="nav-icon">🔍</div>
+            <div class="nav-label">검색</div>
+        </div>
+        <div class="nav-item" onclick="location.href='mypage.html'">
+            <div class="nav-icon">👤</div>
+            <div class="nav-label">마이</div>
+        </div>
+    </div>
+
+    <!-- API Key Modal -->
+    <div class="modal" id="apiModal">
+        <div class="modal-content">
+            <div class="modal-title">KOPIS API 키 설정</div>
+            <input type="text" class="modal-input" id="apiKeyInput" placeholder="API 키를 입력하세요">
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="closeApiModal()">취소</button>
+                <button class="modal-btn primary" onclick="saveApiKey()">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentGenre = 'all';
+        let currentRegion = '11'; // 기본값: 서울
+        let allPerformances = [];
+
+        // 로그인 체크
+        function checkLogin() {
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+            if (!isLoggedIn) {
+                alert('로그인이 필요합니다.');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // API 키 관리
+        function openApiModal() {
+            const modal = document.getElementById('apiModal');
+            const input = document.getElementById('apiKeyInput');
+            input.value = localStorage.getItem('kopisApiKey') || '';
+            modal.classList.add('show');
+        }
+
+        function closeApiModal() {
+            document.getElementById('apiModal').classList.remove('show');
+        }
+
+        function saveApiKey() {
+            const apiKey = document.getElementById('apiKeyInput').value.trim();
+            if (!apiKey) {
+                alert('API 키를 입력해주세요.');
+                return;
+            }
+            localStorage.setItem('kopisApiKey', apiKey);
+            alert('API 키가 저장되었습니다!');
+            closeApiModal();
+            loadPerformances();
+        }
+
+        // KOPIS API 호출 (실제 API 사용)
+        async function loadPerformances() {
+            const apiKey = localStorage.getItem('kopisApiKey');
+            
+            if (!apiKey) {
+                showEmptyState('⚙️ API 키를 먼저 설정해주세요.<br>우측 상단 설정 버튼을 클릭하세요.');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                // 날짜 설정 (오늘부터 30일)
+                const today = new Date();
+                const stdate = formatDate(today);
+                const eddate = formatDate(new Date(today.getTime() + 30*24*60*60*1000));
+                
+                // 프록시 서버를 통해 API 호출 (선택된 지역 사용)
+                const proxyUrl = 'http://localhost:3000/api/performances';
+                const url = `${proxyUrl}?apiKey=${apiKey}&stdate=${stdate}&eddate=${eddate}&cpage=1&rows=50&sharea=${currentRegion}`;
+                
+                console.log('API 호출 시작... (지역코드:', currentRegion, ')');
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                console.log('API 응답:', data);
+                
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'API 호출 실패');
+                }
+                
+                // 공연 데이터 변환
+                allPerformances = data.performances.map(perf => ({
+                    mt20id: perf.mt20id,
+                    prfnm: perf.prfnm,
+                    prfpdfrom: perf.prfpdfrom,
+                    prfpdto: perf.prfpdto,
+                    fcltynm: perf.fcltynm,
+                    poster: perf.poster || 'https://via.placeholder.com/200x280/CCCCCC/666666?text=No+Image',
+                    genrenm: perf.genrenm,
+                    prfstate: perf.prfstate,
+                    area: perf.area || getRegionName(currentRegion)
+                }));
+                
+                console.log(`API 응답: ${allPerformances.length}개 공연`);
+                
+                // 클라이언트 측 지역 필터링 (API가 지역 필터를 제대로 안 할 경우 대비)
+                const filteredPerformances = allPerformances.filter(perf => 
+                    matchRegion(perf.area, currentRegion)
+                );
+                
+                console.log(`${getRegionName(currentRegion)} 필터링 결과: ${filteredPerformances.length}개 공연`);
+                
+                // 필터링된 데이터를 allPerformances에 저장
+                allPerformances = filteredPerformances;
+                
+                if (allPerformances.length === 0) {
+                    showEmptyState(`📅 ${getRegionName(currentRegion)} 지역에<br>해당 기간 공연이 없습니다.`);
+                } else {
+                    displayPerformances(allPerformances);
+                }
+                
+            } catch (error) {
+                console.error('API 호출 실패:', error);
+                
+                // 서버가 안 켜져있을 때
+                if (error.message.includes('Failed to fetch')) {
+                    showEmptyState('⚠️ 서버에 연결할 수 없습니다.<br><br>터미널에서 다음 명령어를 실행하세요:<br><code>cd server && npm start</code>');
+                } else {
+                    showEmptyState(`⚠️ ${error.message}<br><br>API 키를 확인해주세요.`);
+                }
+            }
+        }
+
+        // 공연 표시
+        function displayPerformances(performances) {
+            const list = document.getElementById('performanceList');
+            
+            if (performances.length === 0) {
+                showEmptyState('🎭 해당하는 공연이 없습니다.');
+                return;
+            }
+
+            list.innerHTML = performances.map(perf => `
+                <div class="performance-item" onclick="showDetail('${perf.mt20id}')">
+                    <div class="poster">
+                        <img src="${perf.poster}" alt="${perf.prfnm}" onerror="this.parentElement.innerHTML='<div class=\\'loading\\'>이미지 없음</div>'">
+                    </div>
+                    <div class="info">
+                        <span class="genre-badge">${perf.genrenm}</span>
+                        <div class="title">${perf.prfnm}</div>
+                        <div class="period">📅 ${perf.prfpdfrom} ~ ${perf.prfpdto}</div>
+                        <div class="venue">📍 ${perf.fcltynm}</div>
+                        <span class="state-badge ${getStateClass(perf.prfstate)}">${perf.prfstate}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 상태 클래스
+        function getStateClass(state) {
+            if (state === '공연완료') return 'ended';
+            if (state === '공연예정') return 'upcoming';
+            return '';
+        }
+
+        // 장르 필터
+        function filterByGenre(genre) {
+            currentGenre = genre;
+            
+            // 탭 활성화
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // 필터링
+            let filtered = allPerformances;
+            if (genre !== 'all') {
+                filtered = allPerformances.filter(perf => {
+                    const genreMap = {
+                        'AAAA': '연극',
+                        'GGGA': '뮤지컬',
+                        'CCCA': '대중음악', // KOPIS에서는 '대중음악'
+                        'EEEB': '서양음악(클래식)',
+                    };
+                    // 장르명에 포함되어 있는지 확인 (유연한 매칭)
+                    const targetGenre = genreMap[genre];
+                    return perf.genrenm && perf.genrenm.includes(targetGenre);
+                });
+            }
+
+            if (filtered.length === 0) {
+                showEmptyState('🎭 해당 장르의 공연이 없습니다.');
+            } else {
+                displayPerformances(filtered);
+            }
+        }
+
+        // 검색
+        function searchPerformances() {
+            const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+            if (!keyword) {
+                displayPerformances(allPerformances);
+                return;
+            }
+
+            const filtered = allPerformances.filter(perf => 
+                perf.prfnm.toLowerCase().includes(keyword) ||
+                perf.fcltynm.toLowerCase().includes(keyword)
+            );
+
+            displayPerformances(filtered);
+        }
+
+        // Enter 키로 검색
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchPerformances();
+                }
+            });
+        });
+
+        // 상세 정보
+        function showDetail(id) {
+            window.location.href = `detail.html?id=${id}`;
+        }
+
+        // 지역명 가져오기 (전체 이름)
+        function getRegionName(code) {
+            const regionMap = {
+                '11': '서울', '26': '부산', '27': '대구', '28': '인천',
+                '29': '광주', '30': '대전', '31': '울산', '36': '세종',
+                '41': '경기', '42': '강원', '43': '충북', '44': '충남',
+                '45': '전북', '46': '전남', '47': '경북', '48': '경남', '50': '제주'
+            };
+            return regionMap[code] || '서울';
+        }
+
+        // 지역명 매칭 (API 응답의 area와 선택한 지역 비교)
+        function matchRegion(apiArea, selectedCode) {
+            if (!apiArea) return false;
+            
+            const regionMap = {
+                '11': ['서울', '서울특별시', '서울시'],
+                '26': ['부산', '부산광역시', '부산시'],
+                '27': ['대구', '대구광역시', '대구시'],
+                '28': ['인천', '인천광역시', '인천시'],
+                '29': ['광주', '광주광역시', '광주시'],
+                '30': ['대전', '대전광역시', '대전시'],
+                '31': ['울산', '울산광역시', '울산시'],
+                '36': ['세종', '세종특별자치시', '세종시'],
+                '41': ['경기', '경기도'],
+                '42': ['강원', '강원도', '강원특별자치도'],
+                '43': ['충북', '충청북도', '충북도'],
+                '44': ['충남', '충청남도', '충남도'],
+                '45': ['전북', '전라북도', '전북도', '전북특별자치도'],
+                '46': ['전남', '전라남도', '전남도'],
+                '47': ['경북', '경상북도', '경북도'],
+                '48': ['경남', '경상남도', '경남도'],
+                '50': ['제주', '제주특별자치도', '제주도']
+            };
+            
+            const regionNames = regionMap[selectedCode] || [];
+            
+            // apiArea에 지역명이 포함되어 있는지 확인
+            return regionNames.some(name => apiArea.includes(name));
+        }
+
+        // 지역 변경
+        function changeRegion() {
+            const select = document.getElementById('regionSelect');
+            currentRegion = select.value;
+            
+            console.log('지역 변경:', getRegionName(currentRegion));
+            
+            // 탭 초기화 (전체로)
+            currentGenre = 'all';
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab')[0].classList.add('active');
+            
+            // 공연 정보 다시 로드
+            loadPerformances();
+        }
+
+        // 로딩 표시
+        function showLoading() {
+            document.getElementById('performanceList').innerHTML = `
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <div>공연 정보를 불러오는 중...</div>
+                </div>
+            `;
+        }
+
+        // 빈 상태
+        function showEmptyState(message) {
+            document.getElementById('performanceList').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">🎭</div>
+                    <div style="line-height: 1.6;">${message}</div>
+                </div>
+            `;
+        }
+
+        // 날짜 포맷
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}${month}${day}`;
+        }
+
+        // 로그아웃
+        function logout() {
+            if (confirm('로그아웃 하시겠습니까?')) {
+                sessionStorage.removeItem('isLoggedIn');
+                sessionStorage.removeItem('username');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // 초기화
+        checkLogin();
+        loadPerformances();
+    </script>
+</body>
+</html>
